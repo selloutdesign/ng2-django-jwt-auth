@@ -1,3 +1,6 @@
 <h1>
   {{title}}
 </h1>
+<button (click)="login()" >Http Request</button>
+<button (click)="getGroups2()">Groups</button>
+<p *ngIf="thing">{{thing.token_type}}</p>
