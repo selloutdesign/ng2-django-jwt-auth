@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Http, RequestOptions } from '@angular/http';
-import { JobService } from './app.service';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { JsonpModule } from '@angular/http';
-
-
-import { MyAuthModule } from './my-auth/my-auth.module';
 import { AppComponent } from './app.component';
+import { JobsService } from './jobs.service';
+import {MyAuthModule} from './my-auth/my-auth.module';
 
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -24,11 +22,11 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AppComponent
   ],
   imports: [
-    MyAuthModule,
     BrowserModule,
     FormsModule,
     HttpModule,
-    JsonpModule
+    JsonpModule,
+    MyAuthModule,
   ],
   providers: [
     {
@@ -36,7 +34,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
     },
-    JobService
+    JobsService
 
   ],
   bootstrap: [AppComponent]

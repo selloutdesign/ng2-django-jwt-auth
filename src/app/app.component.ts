@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthHttp, AuthConfig } from 'angular2-jwt';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
-import { JobService } from './app.service';
 
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -21,7 +20,6 @@ export class AppComponent {
   constructor(
     private authHttp: AuthHttp,
     private http: Http,
-    private jobService: JobService,
   ) { }
   
   start(): void{
@@ -29,21 +27,13 @@ export class AppComponent {
     console.log('Changed');
   }
 
-  getGroups2(): void {
-    this.jobService.getJobs().then(jobs =>{
-      console.log(jobs);
-    });
-  }
-
   getGroups() {
     let b = 'username=jsells&password=H0n0rFa1th1985&client_id=VisKOOvUVtPHCkLryKieu9Nse86EpkuqUNRMrbpm&grant_type=password';
     let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    headers.append('Cache-Control', 'no-cache');
+    headers.append('Authorization', 'JWT ' + localStorage.getItem('token'));
     let options = new RequestOptions({ headers: headers, method: 'get' });
     
-    this.http.get('https://work-4-la-poundimal.c9users.io/groups', options)
+    this.http.get('http://127.0.0.1:8000/groups/', options)
       .subscribe(
         data => {
           let res = data.json();
@@ -57,14 +47,15 @@ export class AppComponent {
 
   
   login(credentials) {
-    let b = 'username=jsells&password=H0n0rFa1th1985&client_id=VisKOOvUVtPHCkLryKieu9Nse86EpkuqUNRMrbpm&grant_type=password';
+    let b = 'username=jsells&password=H0n0rFa1th1985';
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    let options = new RequestOptions({ headers: headers, method: "post" });
-    this.http.post('https://work-4-la-poundimal.c9users.io/o/token/', b, options)
+    headers.append('x-requested-with','XMLHttpRequest');
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    this.http.post('http://127.0.0.1:8000/api-token-auth/', b, options)
       .map(res => {
         console.log(res.json());
         this.thing = res.json();
-        localStorage.setItem('token', this.thing.access_token);
+        localStorage.setItem('token', this.thing.token);
       })
       .subscribe(
         // We're assuming the response will be an object
