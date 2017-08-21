@@ -3,4 +3,11 @@
 </h1>
 <button (click)="login()" >Http Request</button>
 <button (click)="getGroups()">Groups</button>
-<p *ngIf="thing">{{thing.token_type}}</p>
+<button (click)="getJobs()">Jobs</button>
+<div *ngIf="jobs">
+  <ul class="job-list">
+    <li *ngFor="let job of jobs" >
+      <h2>{{ job.title }}</h2>     
+    </li>
+  </ul>
+</div>
